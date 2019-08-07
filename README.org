@@ -2,7 +2,7 @@
 
 * JSON Example
 
-#+BEGIN_SRC restclient
+#+BEGIN_SRC restclient :exports both
 POST http://127.0.0.1:6767/a/post/request
 
 {
