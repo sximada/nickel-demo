@@ -6,3 +6,7 @@ edition = "2018"
 
 [dependencies]
 nickel = "*"
+rustc-serialize = "*"
+serde = "*"
+serde_json = "*"
+serde_derive = "*"
