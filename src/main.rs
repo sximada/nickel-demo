@@ -27,7 +27,7 @@ fn main() {
     let mut server = Nickel::new();
     let domain = match env::var("HTTP_DOMAIN") {
         Ok(host) => host,
-        Err(_) => "127.0.0.1:6767".to_string(),
+        Err(_) => "0.0.0.0:6767".to_string(),
     };
     let assets_path = match env::var("ASSETS_PATH") {
         Ok(path) => path,
