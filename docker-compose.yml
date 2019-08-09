@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: my/nickel-demo
+    env_file: .env
+    ports:
+      - "6767:6767"
+
