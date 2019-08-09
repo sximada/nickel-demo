@@ -9,4 +9,3 @@ services:
     env_file: .env
     ports:
       - "6767:6767"
-
