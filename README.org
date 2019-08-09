@@ -1,5 +1,17 @@
 #+TITLE: API Documentation
 
+* Setup
+
+#+BEGIN_EXAMPLE shell
+cargo update
+#+END_EXAMPLE
+
+* Start development server
+
+#+BEGIN_EXAMPLE
+cargo run
+#+END_EXAMPLE
+
 * JSON Example
 
 #+BEGIN_SRC restclient :exports both
