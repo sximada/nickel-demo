@@ -2,9 +2,11 @@ extern crate dotenv;
 
 use std::env;
 use std::collections::HashMap;
+
 use dotenv::dotenv;
 use nickel::{
     HttpRouter,
+    JsonBody,
     MiddlewareResult,
     Mountable,
     Nickel,
@@ -12,6 +14,27 @@ use nickel::{
     Response,
     StaticFilesHandler,
 };
+
+extern crate serde;
+extern crate serde_json;
+#[macro_use] extern crate serde_derive;
+
+use serde::{Serialize, Deserialize};
+
+
+#[derive(Serialize, Deserialize)]
+struct Person {
+    firstname: String,
+    lastname:  String,
+}
+
+
+
+fn api_handler<'mw, 'conn>(req: &mut Request<'mw, 'conn>, res: Response<'mw>) -> MiddlewareResult<'mw> {
+    let person = req.json_as::<Person>().unwrap();
+    res.send(format!("Hello {} {}", person.firstname, person.lastname))
+}
+
 
 
 fn root<'mw, 'conn>(_req: &mut Request<'mw, 'conn>, res: Response<'mw>) -> MiddlewareResult<'mw> {
@@ -35,6 +58,7 @@ fn main() {
     };
 
     server.get("/", root);
+    server.post("/api/", api_handler);
     server.mount("/static/", StaticFilesHandler::new(assets_path));
     match server.listen(domain) {
         Ok(_) => (),

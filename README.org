@@ -15,7 +15,7 @@ cargo run
 * JSON Example
 
 #+BEGIN_SRC restclient :exports both
-POST http://127.0.0.1:6767/a/post/request
+POST http://127.0.0.1:6767/api/
 
 {
   "firstname": "foo",
@@ -26,11 +26,11 @@ POST http://127.0.0.1:6767/a/post/request
 #+RESULTS:
 #+BEGIN_SRC html
 Hello foo bar
-<!-- POST http://127.0.0.1:6767/a/post/request -->
+<!-- POST http://127.0.0.1:6767/api/ -->
 <!-- HTTP/1.1 200 OK -->
 <!-- Content-Type: text/html -->
-<!-- Date: Wed, 07 Aug 2019 11:43:17 GMT -->
+<!-- Date: Sat, 10 Aug 2019 04:54:03 GMT -->
 <!-- Server: Nickel -->
 <!-- Transfer-Encoding: chunked -->
-<!-- Request duration: 0.011726s -->
+<!-- Request duration: 0.011983s -->
 #+END_SRC
