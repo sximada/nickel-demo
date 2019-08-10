@@ -14,6 +14,7 @@ use nickel::{
     Response,
     StaticFilesHandler,
 };
+use nickel::status::StatusCode;
 
 extern crate serde;
 extern crate serde_json;
@@ -32,7 +33,8 @@ struct Person {
 
 fn api_handler<'mw, 'conn>(req: &mut Request<'mw, 'conn>, res: Response<'mw>) -> MiddlewareResult<'mw> {
     let person = req.json_as::<Person>().unwrap();
-    res.send(format!("Hello {} {}", person.firstname, person.lastname))
+    res.send(serde_json::to_value(person).map_err(|e| (StatusCode::InternalServerError, e)))
+    // res.send(format!("Hello {} {}", person.firstname, person.lastname))
 }
 
 
