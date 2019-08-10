@@ -12,6 +12,7 @@ use dotenv::dotenv;
 use nickel::{
     HttpRouter,
     JsonBody,
+    Middleware,
     MiddlewareResult,
     Mountable,
     Nickel,
@@ -21,7 +22,15 @@ use nickel::{
 };
 use hyper::header::{AccessControlAllowOrigin, AccessControlAllowHeaders};
 use nickel::status::StatusCode;
-use serde::{Serialize, Deserialize};
+
+struct Logger;
+
+impl<D> Middleware<D> for Logger {
+    fn invoke<'mw, 'conn>(&self, req: &mut Request<'mw, 'conn, D>, res: Response<'mw, D>) -> MiddlewareResult<'mw, D> {
+        println!("logging request from logger middleware: {:?}", req.origin.uri);
+        res.next_middleware()
+    }
+}
 
 
 #[derive(Serialize, Deserialize)]
@@ -31,7 +40,7 @@ struct Person {
 }
 
 
-fn enable_cors<'mv>(_req: &mut Request, mut res: Response<'mv>) -> MiddlewareResult<'mv> {
+fn enable_cors<'mw>(_req: &mut Request, mut res: Response<'mw>) -> MiddlewareResult<'mw> {
     res.set(AccessControlAllowOrigin::Any);
     res.set(AccessControlAllowHeaders(vec![
         "Origin".into(),
@@ -70,6 +79,10 @@ fn main() {
         Ok(path) => path,
         Err(_) => "assets".to_string(),
     };
+
+    // setup
+    // server.utilize(logger_fn);
+    server.utilize(Logger);
 
     // root
     server.get("/", root);
