@@ -1,4 +1,9 @@
+#[macro_use] extern crate nickel;
+#[macro_use] extern crate serde_derive;
 extern crate dotenv;
+extern crate hyper;
+extern crate serde;
+extern crate serde_json;
 
 use std::env;
 use std::collections::HashMap;
@@ -14,12 +19,8 @@ use nickel::{
     Response,
     StaticFilesHandler,
 };
+use hyper::header::{AccessControlAllowOrigin, AccessControlAllowHeaders};
 use nickel::status::StatusCode;
-
-extern crate serde;
-extern crate serde_json;
-#[macro_use] extern crate serde_derive;
-
 use serde::{Serialize, Deserialize};
 
 
@@ -27,6 +28,18 @@ use serde::{Serialize, Deserialize};
 struct Person {
     firstname: String,
     lastname:  String,
+}
+
+
+fn enable_cors<'mv>(_req: &mut Request, mut res: Response<'mv>) -> MiddlewareResult<'mv> {
+    res.set(AccessControlAllowOrigin::Any);
+    res.set(AccessControlAllowHeaders(vec![
+        "Origin".into(),
+        "X-Requested-With".into(),
+        "Content-Type".into(),
+        "Accept".into(),
+    ]));
+    res.next_middleware()
 }
 
 
@@ -59,9 +72,17 @@ fn main() {
         Err(_) => "assets".to_string(),
     };
 
+    // root
     server.get("/", root);
+
+    // api
+    server.utilize(enable_cors);
+    server.options("/api/**", middleware!(""));
     server.post("/api/", api_handler);
+
+    // static
     server.mount("/static/", StaticFilesHandler::new(assets_path));
+
     match server.listen(domain) {
         Ok(_) => (),
         Err(err) => println!("Failed: {}", err)

@@ -31,9 +31,11 @@ POST http://127.0.0.1:6767/api/
 }
 // POST http://127.0.0.1:6767/api/
 // HTTP/1.1 200 OK
+// Access-Control-Allow-Origin: *
+// Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
 // Content-Type: application/json
-// Date: Sat, 10 Aug 2019 05:03:33 GMT
+// Date: Sat, 10 Aug 2019 05:19:10 GMT
 // Server: Nickel
 // Transfer-Encoding: chunked
-// Request duration: 0.014852s
+// Request duration: 0.014298s
 #+END_SRC
