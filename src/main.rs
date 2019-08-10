@@ -47,7 +47,6 @@ fn enable_cors<'mv>(_req: &mut Request, mut res: Response<'mv>) -> MiddlewareRes
 fn api_handler<'mw, 'conn>(req: &mut Request<'mw, 'conn>, res: Response<'mw>) -> MiddlewareResult<'mw> {
     let person = req.json_as::<Person>().unwrap();
     res.send(serde_json::to_value(person).map_err(|e| (StatusCode::InternalServerError, e)))
-    // res.send(format!("Hello {} {}", person.firstname, person.lastname))
 }
 
 
